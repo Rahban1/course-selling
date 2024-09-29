@@ -1,8 +1,10 @@
 const { Router } = require('express');
-const { userModel } = require('../db.js')
+const { userModel } = require('../db.js');
 const userRouter = Router();
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { userMiddleware} =require('../middlewares/user.js')
+
 
 userRouter.post('/signup',async (req,res)=>{
     const {email, password,firstName, lastName} = req.body;
@@ -49,10 +51,9 @@ userRouter.post('/login',async (req,res)=>{
                 msg: "invalid username or password"
             })
         }
-        const token = jwt.sign({email},process.env.JWT_USER_PASSWORD);
+        const token = jwt.sign({id: user._id},process.env.JWT_USER_PASSWORD);
         res.json({
-            token,
-            compare
+            token
         })
     } catch(e){
         console.log(e)
@@ -62,7 +63,7 @@ userRouter.post('/login',async (req,res)=>{
     }
 })
 
-userRouter.get('/user/purchases',(req,res)=>{
+userRouter.get('/user/purchases',userMiddleware,(req,res)=>{
 
 })
 

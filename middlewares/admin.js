@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const adminMiddleware = (req,res,next){
+const adminMiddleware = (req,res,next)=>{
     const token = req.headers.token;
     const decoded = jwt.verify(token,process.env.JWT_ADMIN_PASSWORD);
     if(!decoded){
@@ -14,5 +14,5 @@ const adminMiddleware = (req,res,next){
 }
 
 module.exports = {
-    userMiddleware
+    adminMiddleware
 }
