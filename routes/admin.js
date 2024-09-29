@@ -90,11 +90,36 @@ adminRouter.post('/course',adminMiddleware,async (req,res)=>{
 })
 
 adminRouter.put('/course',adminMiddleware,(req,res)=>{
+    const adminId = req.userId;
+    const {title,description,imageUrl, price, courseId} = req.body;
 
+    const course = courseModel.updateOne({
+        _id: courseId,
+        creatorId: adminId
+    }, {
+        title,
+        description,
+        imageUrl,
+        price
+    }
+    )
+    res.json({
+        msg: "updated successfully",
+        courseId: course._id
+    })
 })
 
-adminRouter.get('/course/bulk',adminMiddleware,(req,res)=>{
-    const courses = courseModel.find({});
+adminRouter.get('/course/bulk',adminMiddleware,async (req,res)=>{
+    const adminId = req.userId;
+
+    const courses = await courseModel.find({
+        creatorId: adminId
+    });
+    if(courses.length == 0) {
+        res.status(411).json({
+            msg: "no courses found"
+        })
+    }
     res.json({
         courses
     })

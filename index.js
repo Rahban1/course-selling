@@ -6,7 +6,6 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose')
 
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 

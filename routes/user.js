@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { userModel } = require('../db.js');
+const { userModel, purchaseModel } = require('../db.js');
 const userRouter = Router();
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -63,8 +63,15 @@ userRouter.post('/login',async (req,res)=>{
     }
 })
 
-userRouter.get('/user/purchases',userMiddleware,(req,res)=>{
+userRouter.get('/purchases',async (req,res)=>{
+    const userId = req.userId;
 
+    const purchases = await purchaseModel.find({
+        userId
+    })
+    res.json({
+        courses
+    })
 })
 
 module.exports = {
